@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Form</title>
+</head>
+<body>
+    <h1>Order Form</h1>
+
+    <label for="price">Choose Price:</label>
+    <select id="price" name="price">
+        <option value="10">90</option>
+        <option value="20">120</option>
+        <option value="30">230</option>
+        <!-- Add more options as needed -->
+    </select>
+
+    <label for="dish">Choose Dish:</label>
+    <input type="text" id="dish" value="">
+    <!-- Add more options as needed -->
+
+    <label for="table">Choose a Table:</label>
+    <select id="table" name="table">
+        <option value="table1">Table 1</option>
+        <option value="table2">Table 2</option>
+        <option value="table3">Table 3</option>
+        <!-- Add more options as needed -->
+    </select>
+
+    <input type="submit" value="Add to Cart" id="addToCart">
+    
+    <h2>ORDERS</h2>
+    <div id="orderLists">
+</div>
+<script>
+    const addToCartButton = document.getElementById('addToCart');
+    const orderLists = document.getElementById('orderLists');
+
+    addToCartButton.addEventListener('click', () => {
+        const price = document.getElementById('price').value;
+        const dish = document.getElementById('dish').value;
+        const table = document.getElementById('table').value;
+
+        if (dish.trim() === '') {
+            alert('Please enter a dish.');
+            return;
+        }
+
+        const orderDetails = `Price: ${price}, Dish: ${dish}, Table: ${table}`;
+
+        let tableSection = orderLists.querySelector(`#table_${table}`);
+
+        if (!tableSection) {
+            tableSection = document.createElement('div');
+            tableSection.id = `table_${table}`;
+            tableSection.className = 'table-order-section';
+            orderLists.appendChild(tableSection);
+
+            const tableHeader = document.createElement('h3');
+            tableHeader.textContent = `Table ${table} Orders`;
+            tableSection.appendChild(tableHeader);
+
+            const tableList = document.createElement('ul');
+            tableList.id = `orderList_${table}`;
+            tableSection.appendChild(tableList);
+        }
+
+        const tableList = tableSection.querySelector(`#orderList_${table}`);
+        const orderItem = document.createElement('li');
+        orderItem.textContent = orderDetails;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete Order';
+        deleteButton.addEventListener('click', () => {
+            tableList.removeChild(orderItem);
+            if (tableList.children.length === 0) {
+                orderLists.removeChild(tableSection);
+            }
+        });
+
+        orderItem.appendChild(deleteButton);
+        tableList.appendChild(orderItem);
+    });
+</script>
+
+    </body>
+</html>
